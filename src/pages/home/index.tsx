@@ -11,8 +11,10 @@ export const HomePage = () => {
         <PinsFeedWidget />
       ) : (
         <div className="flex flex-col h-full w-full items-center justify-center">
-          <h3>Welcome to Pinja!</h3>
-          <p>Log-in to view and create notes</p>
+          <img src="/pinja.png" alt="Pinja logo" className="rounded-full" />
+
+          <h2>Welcome to Pinja</h2>
+          <p>Log-in to get started</p>
         </div>
       )}
     </>
