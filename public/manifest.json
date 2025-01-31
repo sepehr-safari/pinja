@@ -1,7 +1,7 @@
 {
-  "name": "nostribe",
-  "short_name": "nostribe",
-  "description": "nostribe",
+  "name": "pinja",
+  "short_name": "pinja",
+  "description": "pinja",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#000",

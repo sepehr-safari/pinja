@@ -17,7 +17,7 @@ export const MessagesPage = () => {
   if (activeUser === null) {
     return (
       <div className="flex flex-col h-full w-full items-center justify-center">
-        <h3>Welcome to Nostribe!</h3>
+        <h3>Welcome to Pinja!</h3>
       </div>
     );
   }

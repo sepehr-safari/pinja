@@ -50,10 +50,10 @@ const Layout = () => {
         >
           <Link to="/" className="flex items-center gap-2 p-2">
             <div className="w-8 h-8">
-              <img src="/nostribe-64.png" alt="Nostribe" className="w-8 h-8 object-contain" />
+              <img src="/pinja-64.png" alt="Pinja" className="w-8 h-8 object-contain" />
             </div>
 
-            <span className="text-lg font-bold hidden xl:block">Nostribe</span>
+            <span className="text-lg font-bold hidden xl:block">Pinja</span>
           </Link>
 
           <div className="flex flex-col gap-2 items-center xl:w-full xl:items-start">
@@ -151,10 +151,10 @@ const Layout = () => {
             <div className="flex items-center gap-2 ">
               <Link to="/" className="flex items-center gap-2">
                 <div className="w-8 h-8">
-                  <img src="/nostribe-64.png" alt="Nostribe" className="w-8 h-8 object-contain" />
+                  <img src="/pinja-64.png" alt="Pinja" className="w-8 h-8 object-contain" />
                 </div>
 
-                <span className="text-lg font-bold">Nostribe</span>
+                <span className="text-lg font-bold">Pinja</span>
               </Link>
             </div>
 
