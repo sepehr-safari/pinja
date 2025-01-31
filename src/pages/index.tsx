@@ -291,6 +291,7 @@ const Layout = () => {
 
 const HomePage = () => import('./home');
 const PinPage = () => import('./pin');
+const PinEditorPage = () => import('./pin-editor');
 const NotePage = () => import('./note');
 const ProfilePage = () => import('./profile');
 const MessagesPage = () => import('./messages');
@@ -311,6 +312,12 @@ export const router = createBrowserRouter([
         path: '/pin/:pinId',
         async lazy() {
           return { Component: (await PinPage()).PinPage };
+        },
+      },
+      {
+        path: '/pin/:pinId/edit',
+        async lazy() {
+          return { Component: (await PinEditorPage()).PinEditorPage };
         },
       },
       {

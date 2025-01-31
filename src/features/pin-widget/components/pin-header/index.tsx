@@ -1,6 +1,7 @@
 import { NDKEvent, NDKUser } from '@nostr-dev-kit/ndk';
 import { formatDistanceToNowStrict } from 'date-fns';
 import {
+  Edit2Icon,
   EllipsisIcon,
   FileJsonIcon,
   LinkIcon,
@@ -65,6 +66,13 @@ export const PinHeader = ({ event }: { event: NDKEvent }) => {
             </DropdownMenuTrigger>
 
             <DropdownMenuContent align="end" sideOffset={8}>
+              {profile?.pubkey === event.pubkey && (
+                <DropdownMenuItem onClick={() => navigate(`/pin/${naddr}/edit`)}>
+                  <Edit2Icon className="w-4 h-4 mr-2" />
+                  Edit
+                </DropdownMenuItem>
+              )}
+
               <DropdownMenuItem onClick={() => navigate(`/pin/${naddr}`)}>
                 <SquareArrowOutUpRight className="w-4 h-4 mr-2" />
                 Open
