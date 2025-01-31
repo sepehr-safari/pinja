@@ -11,7 +11,7 @@ export const useUserProfileWidget = ({
   user: NDKUser;
   initialEditMode?: boolean;
 }) => {
-  const [view, setView] = useState<ProfileView>('notes');
+  const [view, setView] = useState<ProfileView>('pins');
   const [editMode, setEditMode] = useState(initialEditMode);
 
   const { profile } = useRealtimeProfile(user.pubkey);

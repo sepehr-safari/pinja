@@ -8,6 +8,7 @@ import {
   ProfileBanner,
   ProfileEditor,
   ProfileNotes,
+  ProfilePins,
   ProfileSummary,
   ProfileViewSwitcher,
 } from './components';
@@ -50,6 +51,7 @@ export const UserProfileWidget = ({
             <ProfileViewSwitcher view={view} setView={setView} />
 
             <div className="p-2">
+              {view == 'pins' && <ProfilePins user={user} />}
               {view == 'notes' && <ProfileNotes user={user} notesOnly />}
               {view == 'replies' && <ProfileNotes user={user} repliesOnly />}
               {/* {view == 'relays' && <>User Relays</>} */}

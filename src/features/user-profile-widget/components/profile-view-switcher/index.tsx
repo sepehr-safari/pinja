@@ -15,6 +15,14 @@ export const ProfileViewSwitcher = ({
     <>
       <div className="flex items-center justify-between gap-2 border-y px-1">
         <Button
+          onClick={() => setView('pins')}
+          size="sm"
+          variant="link"
+          className={cn(view == 'pins' ? 'underline underline-offset-8' : 'hover:no-underline')}
+        >
+          Pins
+        </Button>
+        <Button
           onClick={() => setView('notes')}
           size="sm"
           variant="link"

@@ -2,9 +2,7 @@ import { GitHubLogoIcon } from '@radix-ui/react-icons';
 import {
   ArrowRightIcon,
   BellIcon,
-  BookmarkIcon,
   CoffeeIcon,
-  CompassIcon,
   HomeIcon,
   MailIcon,
   MenuIcon,
@@ -50,7 +48,7 @@ const Layout = () => {
         >
           <Link to="/" className="flex items-center gap-2 p-2">
             <div className="w-8 h-8">
-              <img src="/pinja-64.png" alt="Pinja" className="w-8 h-8 object-contain" />
+              <img src="/pinja.png" alt="Pinja" className="w-8 h-8 object-contain" />
             </div>
 
             <span className="text-lg font-bold hidden xl:block">Pinja</span>
@@ -68,7 +66,7 @@ const Layout = () => {
               <span className="hidden xl:block">Home</span>
             </Link>
 
-            <Link
+            {/* <Link
               to="/"
               className="flex items-center gap-2 p-2 transition-colors duration-500 ease-out text-primary/60 hover:text-primary w-full rounded-lg hover:bg-secondary"
             >
@@ -77,7 +75,7 @@ const Layout = () => {
               </div>
 
               <span className="hidden xl:block">Explore</span>
-            </Link>
+            </Link> */}
 
             <Link
               to="/messages"
@@ -90,7 +88,7 @@ const Layout = () => {
               <span className="hidden xl:block">Messages</span>
             </Link>
 
-            <Link
+            {/* <Link
               to="/"
               className="flex items-center gap-2 p-2 transition-colors duration-500 ease-out text-primary/60 hover:text-primary w-full rounded-lg hover:bg-secondary"
             >
@@ -99,7 +97,7 @@ const Layout = () => {
               </div>
 
               <span className="hidden xl:block">Bookmarks</span>
-            </Link>
+            </Link> */}
 
             <Link
               to="/notifications"
@@ -151,7 +149,7 @@ const Layout = () => {
             <div className="flex items-center gap-2 ">
               <Link to="/" className="flex items-center gap-2">
                 <div className="w-8 h-8">
-                  <img src="/pinja-64.png" alt="Pinja" className="w-8 h-8 object-contain" />
+                  <img src="/pinja.png" alt="Pinja" className="w-8 h-8 object-contain" />
                 </div>
 
                 <span className="text-lg font-bold">Pinja</span>
@@ -179,14 +177,14 @@ const Layout = () => {
                 </div>
               </Link>
 
-              <Link
+              {/* <Link
                 to="/explore"
                 className="flex items-center gap-2 transition-colors duration-500 ease-out text-primary/60 hover:text-primary"
               >
                 <div>
                   <CompassIcon size={28} strokeWidth={1.4} />
                 </div>
-              </Link>
+              </Link> */}
 
               <SearchWidget>
                 <div className="flex items-center gap-2 transition-colors duration-500 ease-out text-primary/60 hover:text-primary hover:cursor-pointer">
@@ -292,6 +290,7 @@ const Layout = () => {
 };
 
 const HomePage = () => import('./home');
+const PinPage = () => import('./pin');
 const NotePage = () => import('./note');
 const ProfilePage = () => import('./profile');
 const MessagesPage = () => import('./messages');
@@ -306,6 +305,12 @@ export const router = createBrowserRouter([
         path: '/',
         async lazy() {
           return { Component: (await HomePage()).HomePage };
+        },
+      },
+      {
+        path: '/pin/:pinId',
+        async lazy() {
+          return { Component: (await PinPage()).PinPage };
         },
       },
       {

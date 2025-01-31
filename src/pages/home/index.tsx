@@ -1,6 +1,6 @@
 import { useActiveUser } from 'nostr-hooks';
 
-import { NotesFeedWidget } from '@/features/notes-feed-widget';
+import { PinsFeedWidget } from '@/features/pins-feed-widget';
 
 export const HomePage = () => {
   const { activeUser } = useActiveUser();
@@ -8,7 +8,7 @@ export const HomePage = () => {
   return (
     <>
       {activeUser ? (
-        <NotesFeedWidget />
+        <PinsFeedWidget />
       ) : (
         <div className="flex flex-col h-full w-full items-center justify-center">
           <h3>Welcome to Pinja!</h3>
