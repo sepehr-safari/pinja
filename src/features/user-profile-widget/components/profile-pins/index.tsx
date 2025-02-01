@@ -9,15 +9,13 @@ import { useProfilePins } from './hooks';
 
 export const ProfilePins = memo(
   ({ user }: { user: NDKUser }) => {
-    const { events, loadMore, hasMore, isLoading } = useProfilePins({
+    const { sortedEvents, loadMore, hasMore, isLoading } = useProfilePins({
       user,
     });
 
     return (
       <>
-        <div className="flex flex-col gap-2">
-          {events?.map((event) => <PinWidget key={event.id} pinEvent={event} />)}
-        </div>
+        <div>{sortedEvents?.map((event) => <PinWidget key={event.id} pinEvent={event} />)}</div>
 
         {hasMore && (
           <div className="py-4 flex justify-center">

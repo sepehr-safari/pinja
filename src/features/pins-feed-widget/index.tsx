@@ -8,7 +8,7 @@ import { PinWidget } from '@/features/pin-widget';
 import { usePinsFeedWidget } from './hooks';
 
 export const PinsFeedWidget = () => {
-  const { events, hasMore, loadMore, isLoading } = usePinsFeedWidget();
+  const { sortedEvents, hasMore, loadMore, isLoading } = usePinsFeedWidget();
 
   return (
     <>
@@ -19,9 +19,9 @@ export const PinsFeedWidget = () => {
 
         {isLoading ? (
           <Spinner />
-        ) : events ? (
-          <div className="pt-2 flex flex-col gap-2">
-            {events.map((event) => (
+        ) : sortedEvents ? (
+          <div className="">
+            {sortedEvents.map((event) => (
               <PinWidget pinEvent={event} />
             ))}
           </div>
