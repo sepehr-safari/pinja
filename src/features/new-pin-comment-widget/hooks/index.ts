@@ -35,6 +35,8 @@ export const useNewPinCommentWidget = (pinEvent: NDKEvent) => {
             description: 'Failed to post comment',
             variant: 'destructive',
           });
+        } else {
+          setContent('');
         }
       })
       .catch((_) => {
@@ -44,7 +46,7 @@ export const useNewPinCommentWidget = (pinEvent: NDKEvent) => {
           variant: 'destructive',
         });
       });
-  }, [ndk, content, pinEvent, toast]);
+  }, [ndk, content, pinEvent, toast, setContent]);
 
   return { content, setContent, post, profile };
 };

@@ -40,6 +40,8 @@ export const useNewPinWidget = () => {
             description: 'Failed to pin',
             variant: 'destructive',
           });
+        } else {
+          setContent('');
         }
       })
       .catch((_) => {
@@ -49,7 +51,7 @@ export const useNewPinWidget = () => {
           variant: 'destructive',
         });
       });
-  }, [ndk, content, toast]);
+  }, [ndk, content, toast, setContent]);
 
   return { content, setContent, post, profile };
 };
