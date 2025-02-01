@@ -1,13 +1,14 @@
 import { NDKEvent, NDKUser } from '@nostr-dev-kit/ndk';
 import { formatDistanceToNowStrict } from 'date-fns';
 import {
+  BarcodeIcon,
   Edit2Icon,
   EllipsisIcon,
   FileJsonIcon,
   LinkIcon,
   SquareArrowOutUpRight,
-  TagIcon,
   TextIcon,
+  XSquareIcon,
 } from 'lucide-react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avatar';
@@ -16,6 +17,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/shared/components/ui/dropdown-menu';
 
@@ -24,7 +26,7 @@ import { PinParentPreview } from '../pin-parent-preview';
 import { usePinHeader } from './hooks';
 
 export const PinHeader = ({ event }: { event: NDKEvent }) => {
-  const { copy, navigate, profile, naddr, ref } = usePinHeader(event);
+  const { copy, navigate, profile, naddr, ref, deletePin } = usePinHeader(event);
 
   return (
     <>
@@ -98,14 +100,28 @@ export const PinHeader = ({ event }: { event: NDKEvent }) => {
               </DropdownMenuItem>
 
               <DropdownMenuItem onClick={() => copy(naddr)}>
-                <TagIcon className="w-4 h-4 mr-2" />
-                Copy pin ID
+                <BarcodeIcon className="w-4 h-4 mr-2" />
+                Copy event ID
               </DropdownMenuItem>
 
               <DropdownMenuItem onClick={() => copy(JSON.stringify(event.rawEvent()))}>
                 <FileJsonIcon className="w-4 h-4 mr-2" />
                 Copy raw data
               </DropdownMenuItem>
+
+              {profile?.pubkey === event.pubkey && (
+                <>
+                  <DropdownMenuSeparator />
+
+                  <DropdownMenuItem
+                    className="text-destructive focus:text-destructive"
+                    onClick={() => deletePin(event)}
+                  >
+                    <XSquareIcon className="w-4 h-4 mr-2" />
+                    Delete
+                  </DropdownMenuItem>
+                </>
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
