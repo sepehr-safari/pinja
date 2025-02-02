@@ -107,11 +107,14 @@ export const PinContent = ({ event, editMode }: { event: NDKEvent; editMode?: bo
         </>
       ) : (
         <>
-          <Button variant="link" className="p-0">
-            <a href={parsedPinEvent?.url} target="_blank" rel="noopener noreferrer">
-              {parsedPinEvent?.url}
-            </a>
-          </Button>
+          <a
+            href={parsedPinEvent?.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="[overflow-wrap:anywhere] text-primary hover:underline"
+          >
+            {parsedPinEvent?.url}
+          </a>
         </>
       )}
     </>
