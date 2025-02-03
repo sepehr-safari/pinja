@@ -1,5 +1,5 @@
 import { NDKEvent } from '@nostr-dev-kit/ndk';
-import { useNdk, useRealtimeProfile } from 'nostr-hooks';
+import { useActiveUser, useNdk, useRealtimeProfile } from 'nostr-hooks';
 import { naddrEncode } from 'nostr-tools/nip19';
 import { useCallback, useMemo } from 'react';
 import { useInView } from 'react-intersection-observer';
@@ -21,6 +21,7 @@ export const usePinHeader = (event: NDKEvent) => {
   const navigate = useNavigate();
 
   const { ndk } = useNdk();
+  const { activeUser } = useActiveUser();
 
   const { toast } = useToast();
 
@@ -78,5 +79,6 @@ export const usePinHeader = (event: NDKEvent) => {
     navigate,
     naddr,
     deletePin,
+    activeUser,
   };
 };

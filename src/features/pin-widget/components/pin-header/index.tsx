@@ -26,7 +26,7 @@ import { PinParentPreview } from '../pin-parent-preview';
 import { usePinHeader } from './hooks';
 
 export const PinHeader = ({ event }: { event: NDKEvent }) => {
-  const { copy, navigate, profile, naddr, ref, deletePin } = usePinHeader(event);
+  const { copy, navigate, profile, naddr, ref, deletePin, activeUser } = usePinHeader(event);
 
   return (
     <>
@@ -68,13 +68,6 @@ export const PinHeader = ({ event }: { event: NDKEvent }) => {
             </DropdownMenuTrigger>
 
             <DropdownMenuContent align="end" sideOffset={8}>
-              {profile?.pubkey === event.pubkey && (
-                <DropdownMenuItem onClick={() => navigate(`/pin/${naddr}/edit`)}>
-                  <Edit2Icon className="w-4 h-4 mr-2" />
-                  Edit
-                </DropdownMenuItem>
-              )}
-
               <DropdownMenuItem onClick={() => navigate(`/pin/${naddr}`)}>
                 <SquareArrowOutUpRight className="w-4 h-4 mr-2" />
                 Open
@@ -109,9 +102,14 @@ export const PinHeader = ({ event }: { event: NDKEvent }) => {
                 Copy raw data
               </DropdownMenuItem>
 
-              {profile?.pubkey === event.pubkey && (
+              {activeUser?.pubkey === event.pubkey && (
                 <>
                   <DropdownMenuSeparator />
+
+                  <DropdownMenuItem onClick={() => navigate(`/pin/${naddr}/edit`)}>
+                    <Edit2Icon className="w-4 h-4 mr-2" />
+                    Edit
+                  </DropdownMenuItem>
 
                   <DropdownMenuItem
                     className="text-destructive focus:text-destructive"
