@@ -1,12 +1,15 @@
 import { NDKEvent } from '@nostr-dev-kit/ndk';
+import { ChevronDownIcon, PlusIcon, XIcon } from 'lucide-react';
 import { useNdk } from 'nostr-hooks';
+import { naddrEncode } from 'nostr-tools/nip19';
 import { useCallback, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Button } from '@/shared/components/ui/button';
 import { Input } from '@/shared/components/ui/input';
 import { useToast } from '@/shared/components/ui/use-toast';
-import { naddrEncode } from 'nostr-tools/nip19';
+
+import { cn } from '@/shared/utils';
 
 const parsePinEvent = (pinEvent: NDKEvent) => {
   const url =
@@ -29,6 +32,9 @@ export const PinContent = ({ event, editMode }: { event: NDKEvent; editMode?: bo
   const parsedPinEvent = useMemo(() => parsePinEvent(event), [event]);
 
   const [content, setContent] = useState<string>(parsedPinEvent.url);
+  const [hashtags, setHashtags] = useState<string[]>(parsedPinEvent.hashtags);
+  const [newHashtag, setNewHashtag] = useState<string>('');
+  const [showOptions, setShowOptions] = useState<boolean>(false);
 
   const { ndk } = useNdk();
 
@@ -55,6 +61,9 @@ export const PinContent = ({ event, editMode }: { event: NDKEvent; editMode?: bo
       e.kind = event.kind;
       e.dTag = event.dTag;
       e.content = content;
+      hashtags.forEach((t) => {
+        e.tags.push(['t', t]);
+      });
 
       e.publish()
         .then((relaySet) => {
@@ -83,14 +92,14 @@ export const PinContent = ({ event, editMode }: { event: NDKEvent; editMode?: bo
           });
         });
     },
-    [ndk, content, toast],
+    [ndk, content, toast, setContent, hashtags, navigate],
   );
 
   return (
     <>
       {editMode ? (
         <>
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 pb-2">
             <Input
               className="bg-background"
               value={content}
@@ -98,15 +107,79 @@ export const PinContent = ({ event, editMode }: { event: NDKEvent; editMode?: bo
               placeholder="https://"
             />
 
-            <div className="w-full flex gap-2 justify-end">
-              <Button className="px-8" size="sm" onClick={() => update(event)}>
-                Update Pin
+            {showOptions && (
+              <>
+                <div className="flex items-center gap-2 flex-wrap p-2 border rounded-xl bg-background w-full">
+                  {hashtags.map((t) => (
+                    <div
+                      key={t}
+                      className="p-2 border rounded-md text-xs flex items-center gap-2 bg-secondary text-secondary-foreground"
+                    >
+                      <div
+                        className="flex items-center justify-center cursor-pointer"
+                        onClick={() => setHashtags((prev) => prev.filter((h) => h !== t))}
+                      >
+                        <XIcon className="w-4 h-4" />
+                      </div>
+
+                      <div className="pr-2">#{t}</div>
+                    </div>
+                  ))}
+
+                  <div className="flex gap-2 items-center">
+                    <Input
+                      className="bg-background"
+                      value={newHashtag}
+                      onChange={(e) => setNewHashtag(e.target.value.trim())}
+                      placeholder="Add Hashtag (e.g. music)"
+                      onKeyUp={(e) => {
+                        if (e.key === 'Enter') {
+                          newHashtag &&
+                            setHashtags((prev) =>
+                              prev.includes(newHashtag) ? prev : [...prev, newHashtag],
+                            );
+                          setNewHashtag('');
+                        }
+                      }}
+                    />
+
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={() => {
+                        newHashtag &&
+                          setHashtags((prev) =>
+                            prev.includes(newHashtag) ? prev : [...prev, newHashtag],
+                          );
+                        setNewHashtag('');
+                      }}
+                    >
+                      <PlusIcon className="w-4 h-4" />
+                    </Button>
+                  </div>
+                </div>
+              </>
+            )}
+
+            <div className="w-full flex gap-2">
+              <Button variant="outline" onClick={() => setShowOptions((prev) => !prev)}>
+                {showOptions ? 'Less Options' : 'More Options'}
+                <ChevronDownIcon
+                  className={cn(
+                    'ml-1 w-4 h-4 transition-transform duration-300',
+                    showOptions && 'transform -rotate-180',
+                  )}
+                />
+              </Button>
+
+              <Button className="px-8 ml-auto" onClick={() => update(event)}>
+                Update
               </Button>
             </div>
           </div>
         </>
       ) : (
-        <>
+        <div className="flex flex-col gap-2">
           <a
             href={parsedPinEvent?.url}
             target="_blank"
@@ -115,7 +188,18 @@ export const PinContent = ({ event, editMode }: { event: NDKEvent; editMode?: bo
           >
             {parsedPinEvent?.url}
           </a>
-        </>
+
+          <div className="flex items-center flex-wrap gap-2">
+            {parsedPinEvent?.hashtags.map((t) => (
+              <div
+                key={t}
+                className="p-2 border rounded-md text-xs flex items-center gap-2 bg-secondary text-secondary-foreground hover:underline hover:cursor-pointer"
+              >
+                #{t}
+              </div>
+            ))}
+          </div>
+        </div>
       )}
     </>
   );
