@@ -46,7 +46,7 @@ export const usePinsFeedWidget = () => {
         filters: [
           {
             kinds: [39700 as NDKKind],
-            limit: 10,
+            limit: 50,
           },
         ],
         opts: { groupableDelay: 500 },
@@ -58,7 +58,7 @@ export const usePinsFeedWidget = () => {
         filters: [
           {
             kinds: [39700 as NDKKind],
-            limit: 10,
+            limit: 50,
             authors: [activeUser.pubkey, ...(follows || []).map((u) => u.pubkey)],
           },
         ],
@@ -69,7 +69,7 @@ export const usePinsFeedWidget = () => {
         filters: [
           {
             kinds: [39700 as NDKKind],
-            limit: 10,
+            limit: 50,
           },
         ],
         opts: { groupableDelay: 500 },

@@ -68,7 +68,7 @@ export const PinsFeedWidget = () => {
 
         {hasMore && (
           <div className="py-4 flex justify-center">
-            <Button variant="secondary" onClick={() => loadMore(100)} className="w-full">
+            <Button variant="secondary" onClick={() => loadMore(50)} className="w-full">
               Load more
             </Button>
           </div>
