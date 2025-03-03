@@ -20,6 +20,8 @@ export const NewPinWidget = () => {
     setNewHashtag,
     showOptions,
     setShowOptions,
+    description,
+    setDescription,
   } = useNewPinWidget();
 
   return (
@@ -42,7 +44,14 @@ export const NewPinWidget = () => {
 
           {showOptions && (
             <>
-              <div className="flex items-center gap-2 flex-wrap p-2 border rounded-xl bg-background w-full">
+              <Input
+                className="bg-background"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                placeholder="Description"
+              />
+
+              <div className="flex items-center gap-2 flex-wrap p-2 border rounded-md bg-background w-full">
                 {hashtags.map((t) => (
                   <div
                     key={t}

@@ -1,5 +1,5 @@
 import { NDKEvent } from '@nostr-dev-kit/ndk';
-import { ChevronDownIcon, PlusIcon, XIcon } from 'lucide-react';
+import { ArrowRightIcon, ChevronDownIcon, PlusIcon, XIcon } from 'lucide-react';
 import { useNdk } from 'nostr-hooks';
 import { naddrEncode } from 'nostr-tools/nip19';
 import { useCallback, useMemo, useState } from 'react';
@@ -17,6 +17,9 @@ const parsePinEvent = (pinEvent: NDKEvent) => {
       ? pinEvent.content
       : `https://${pinEvent.content}`;
 
+  const descriptionTags = pinEvent.getMatchingTags('description');
+  const descriptionTag = descriptionTags.length > 0 ? descriptionTags[0] : null;
+  const description = descriptionTag && descriptionTag.length > 0 ? descriptionTag[1] : '';
   const tTags = pinEvent.getMatchingTags('t');
   const hashtags = tTags
     .map((tTag) => (tTag.length > 1 ? tTag[1] : null))
@@ -24,6 +27,7 @@ const parsePinEvent = (pinEvent: NDKEvent) => {
 
   return {
     url,
+    description,
     hashtags,
   };
 };
@@ -32,6 +36,7 @@ export const PinContent = ({ event, editMode }: { event: NDKEvent; editMode?: bo
   const parsedPinEvent = useMemo(() => parsePinEvent(event), [event]);
 
   const [content, setContent] = useState<string>(parsedPinEvent.url);
+  const [description, setDescription] = useState<string>(parsedPinEvent.description);
   const [hashtags, setHashtags] = useState<string[]>(parsedPinEvent.hashtags);
   const [newHashtag, setNewHashtag] = useState<string>('');
   const [showOptions, setShowOptions] = useState<boolean>(false);
@@ -61,6 +66,7 @@ export const PinContent = ({ event, editMode }: { event: NDKEvent; editMode?: bo
       e.kind = event.kind;
       e.dTag = event.dTag;
       e.content = content;
+      e.tags.push(['description', description]);
       hashtags.forEach((t) => {
         e.tags.push(['t', t]);
       });
@@ -92,7 +98,7 @@ export const PinContent = ({ event, editMode }: { event: NDKEvent; editMode?: bo
           });
         });
     },
-    [ndk, content, toast, setContent, hashtags, navigate],
+    [ndk, content, toast, setContent, hashtags, navigate, description],
   );
 
   return (
@@ -109,7 +115,14 @@ export const PinContent = ({ event, editMode }: { event: NDKEvent; editMode?: bo
 
             {showOptions && (
               <>
-                <div className="flex items-center gap-2 flex-wrap p-2 border rounded-xl bg-background w-full">
+                <Input
+                  className="bg-background"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  placeholder="Description"
+                />
+
+                <div className="flex items-center gap-2 flex-wrap p-2 border rounded-md bg-background w-full">
                   {hashtags.map((t) => (
                     <div
                       key={t}
@@ -184,10 +197,16 @@ export const PinContent = ({ event, editMode }: { event: NDKEvent; editMode?: bo
             href={parsedPinEvent?.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="[overflow-wrap:anywhere] text-primary hover:underline"
+            className="[overflow-wrap:anywhere] text-primary flex items-center group hover:underline"
           >
             {parsedPinEvent?.url}
+
+            <ArrowRightIcon className="ml-1 w-4 h-4 opacity-0 -translate-x-1 transition-all duration-200 ease-out group-hover:translate-x-0 group-hover:opacity-80" />
           </a>
+
+          {parsedPinEvent?.description !== '' && (
+            <div className="text-sm [overflow-wrap:anywhere]">{parsedPinEvent?.description}</div>
+          )}
 
           <div className="flex items-center flex-wrap gap-2">
             {parsedPinEvent?.hashtags.map((t) => (

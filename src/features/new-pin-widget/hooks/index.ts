@@ -9,6 +9,7 @@ export const useNewPinWidget = () => {
   const [hashtags, setHashtags] = useState<string[]>([]);
   const [newHashtag, setNewHashtag] = useState<string>('');
   const [showOptions, setShowOptions] = useState<boolean>(false);
+  const [description, setDescription] = useState<string>('');
 
   const { activeUser } = useActiveUser();
   const { profile } = useRealtimeProfile(activeUser?.pubkey);
@@ -34,6 +35,7 @@ export const useNewPinWidget = () => {
     const e = new NDKEvent(ndk);
     e.kind = 39700;
     e.content = content;
+    e.tags.push(['description', description]);
     hashtags.forEach((t) => {
       e.tags.push(['t', t]);
     });
@@ -58,7 +60,7 @@ export const useNewPinWidget = () => {
           variant: 'destructive',
         });
       });
-  }, [ndk, content, toast, setContent, hashtags, setHashtags]);
+  }, [ndk, content, toast, setContent, hashtags, setHashtags, description]);
 
   return {
     content,
@@ -71,5 +73,7 @@ export const useNewPinWidget = () => {
     setNewHashtag,
     showOptions,
     setShowOptions,
+    description,
+    setDescription,
   };
 };
