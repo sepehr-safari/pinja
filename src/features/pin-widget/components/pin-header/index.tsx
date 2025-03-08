@@ -51,7 +51,7 @@ export const PinHeader = ({ event }: { event: NDKEvent }) => {
             className="w-fit text-xs text-gray-500 leading-tight hover:cursor-pointer"
             onClick={() => navigate(`/profile/${new NDKUser({ pubkey: event.pubkey }).npub}`)}
           >
-            {profile?.nip05?.toString()}
+            {profile?.nip05?.toString().replace('_@', '')}
           </p>
         </div>
 

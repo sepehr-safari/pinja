@@ -32,7 +32,7 @@ export const UserItem = memo(
           <div className="hidden md:block">
             {profile?.name && <div>{ellipsis(profile.name.toString(), 20)}</div>}
             <div className="text-gray-500 text-sm">
-              {ellipsis(profile?.nip05?.toString() || npub, 25)}
+              {ellipsis(profile?.nip05?.toString().replace('_@', '') || npub, 25)}
             </div>
           </div>
         </div>

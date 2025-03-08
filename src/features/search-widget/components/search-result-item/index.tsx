@@ -53,7 +53,7 @@ export const SearchResultItem = memo(
             <div>
               {profile && !!profile.name && <div>{profile.name}</div>}
               <div className="text-gray-500 text-sm">
-                {profile && profile.nip05 ? profile.nip05 : ellipsis(npub, 10)}
+                {profile && profile.nip05 ? profile.nip05.replace('_@', '') : ellipsis(npub, 10)}
               </div>
             </div>
           </div>
