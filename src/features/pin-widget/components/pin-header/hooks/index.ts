@@ -29,7 +29,7 @@ export const usePinHeader = (event: NDKEvent) => {
     () =>
       naddrEncode({
         identifier: event.tagAddress(),
-        kind: event.kind || 39700,
+        kind: event.kind!,
         pubkey: event.pubkey,
         relays: event.onRelays.map((relay) => relay.url),
       }),
@@ -38,7 +38,7 @@ export const usePinHeader = (event: NDKEvent) => {
 
   const deletePin = useCallback(
     (pinEvent: NDKEvent) => {
-      if (!ndk || !ndk.signer) {
+      if (!ndk || !ndk.signer || !pinEvent.kind) {
         return;
       }
 
@@ -47,8 +47,8 @@ export const usePinHeader = (event: NDKEvent) => {
       e.tags = [
         ['e', pinEvent.id],
         ['a', pinEvent.tagAddress()],
-        ['k', '39700'],
-        ['k', '39700'],
+        ['k', pinEvent.kind.toString()],
+        ['k', pinEvent.kind.toString()],
       ];
 
       e.publish()

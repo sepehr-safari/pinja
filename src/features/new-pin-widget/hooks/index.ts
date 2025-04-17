@@ -5,7 +5,7 @@ import { useCallback, useState } from 'react';
 import { useToast } from '@/shared/components/ui/use-toast';
 
 export const useNewPinWidget = () => {
-  const [content, setContent] = useState<string>('');
+  const [url, setUrl] = useState<string>('');
   const [hashtags, setHashtags] = useState<string[]>([]);
   const [newHashtag, setNewHashtag] = useState<string>('');
   const [showOptions, setShowOptions] = useState<boolean>(false);
@@ -23,19 +23,19 @@ export const useNewPinWidget = () => {
       return;
     }
 
-    if (content.length === 0 || (!content.startsWith('http') && !content.startsWith('www'))) {
+    if (url.length === 0 || !url.startsWith('https')) {
       toast({
         title: 'Invalid URL',
-        description: 'URL must start with http or www',
+        description: 'URL must start with https',
         variant: 'destructive',
       });
       return;
     }
 
     const e = new NDKEvent(ndk);
-    e.kind = 39700;
-    e.content = content;
-    e.tags.push(['description', description]);
+    e.kind = 39701;
+    e.tags.push(['d', url.replace('https://', '')]);
+    e.content = description;
     hashtags.forEach((t) => {
       e.tags.push(['t', t]);
     });
@@ -49,7 +49,7 @@ export const useNewPinWidget = () => {
             variant: 'destructive',
           });
         } else {
-          setContent('');
+          setUrl('');
           setHashtags([]);
         }
       })
@@ -60,11 +60,11 @@ export const useNewPinWidget = () => {
           variant: 'destructive',
         });
       });
-  }, [ndk, content, toast, setContent, hashtags, setHashtags, description]);
+  }, [ndk, url, toast, setUrl, hashtags, setHashtags, description]);
 
   return {
-    content,
-    setContent,
+    url,
+    setUrl,
     post,
     profile,
     hashtags,

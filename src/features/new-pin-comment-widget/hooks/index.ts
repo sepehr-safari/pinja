@@ -15,7 +15,7 @@ export const useNewPinCommentWidget = (pinEvent: NDKEvent) => {
   const { toast } = useToast();
 
   const post = useCallback(() => {
-    if (!ndk || !ndk.signer) {
+    if (!ndk || !ndk.signer || !pinEvent.kind) {
       return;
     }
 
@@ -24,7 +24,7 @@ export const useNewPinCommentWidget = (pinEvent: NDKEvent) => {
     e.content = content;
 
     e.tags.push(['a', pinEvent.tagAddress()]);
-    e.tags.push(['k', '39700']);
+    e.tags.push(['k', pinEvent.kind.toString()]);
     e.tags.push(['p', pinEvent.pubkey]);
 
     e.publish()

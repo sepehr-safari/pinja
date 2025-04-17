@@ -48,6 +48,10 @@ export const usePinsFeedWidget = () => {
             kinds: [39700 as NDKKind],
             limit: 50,
           },
+          {
+            kinds: [39701 as NDKKind],
+            limit: 50,
+          },
         ],
         opts: { groupableDelay: 500 },
       });
@@ -61,6 +65,11 @@ export const usePinsFeedWidget = () => {
             limit: 50,
             authors: [activeUser.pubkey, ...(follows || []).map((u) => u.pubkey)],
           },
+          {
+            kinds: [39701 as NDKKind],
+            limit: 50,
+            authors: [activeUser.pubkey, ...(follows || []).map((u) => u.pubkey)],
+          },
         ],
         opts: { groupableDelay: 500 },
       });
@@ -69,6 +78,10 @@ export const usePinsFeedWidget = () => {
         filters: [
           {
             kinds: [39700 as NDKKind],
+            limit: 50,
+          },
+          {
+            kinds: [39701 as NDKKind],
             limit: 50,
           },
         ],

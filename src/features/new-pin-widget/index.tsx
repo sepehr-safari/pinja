@@ -10,9 +10,9 @@ import { useNewPinWidget } from './hooks';
 
 export const NewPinWidget = () => {
   const {
-    content,
+    url,
     post,
-    setContent,
+    setUrl,
     profile,
     hashtags,
     setHashtags,
@@ -36,8 +36,8 @@ export const NewPinWidget = () => {
 
             <Input
               className="bg-background"
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
+              value={url}
+              onChange={(e) => setUrl(e.target.value)}
               placeholder="https://"
             />
           </div>

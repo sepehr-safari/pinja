@@ -19,7 +19,10 @@ export const useProfilePins = ({ user }: { user: NDKUser }) => {
     }
 
     createSubscription({
-      filters: [{ authors: [user.pubkey], kinds: [39700 as NDKKind], limit: 50 }],
+      filters: [
+        { authors: [user.pubkey], kinds: [39700 as NDKKind], limit: 50 },
+        { authors: [user.pubkey], kinds: [39701 as NDKKind], limit: 50 },
+      ],
       opts: { groupableDelay: 500 },
     });
   }, [createSubscription, user.pubkey]);
