@@ -8,6 +8,7 @@ import {
   LinkIcon,
   SquareArrowOutUpRight,
   TextIcon,
+  TriangleAlertIcon,
   XSquareIcon,
 } from 'lucide-react';
 
@@ -20,6 +21,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/shared/components/ui/dropdown-menu';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/shared/components/ui/tooltip';
 
 import { PinParentPreview } from '../pin-parent-preview';
 
@@ -56,6 +63,19 @@ export const PinHeader = ({ event }: { event: NDKEvent }) => {
         </div>
 
         <div className="flex items-center gap-2">
+          {event.kind === 39700 && (
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  <TriangleAlertIcon className="w-4 h-4 text-yellow-500" />
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Deprecated event kind 39700 due to NIP-B0</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          )}
+
           <p className="text-xs text-gray-500">
             {formatDistanceToNowStrict((event.created_at || 0) * 1000)}
           </p>

@@ -12,18 +12,33 @@ import { useToast } from '@/shared/components/ui/use-toast';
 import { cn } from '@/shared/utils';
 
 const parsePinEvent = (pinEvent: NDKEvent) => {
-  const url =
-    pinEvent.content.startsWith('http://') || pinEvent.content.startsWith('https://')
-      ? pinEvent.content
-      : `https://${pinEvent.content}`;
+  const dTags = pinEvent.getMatchingTags('d');
+  const dTag = dTags.length > 0 ? dTags[0] : null;
 
-  const descriptionTags = pinEvent.getMatchingTags('description');
-  const descriptionTag = descriptionTags.length > 0 ? descriptionTags[0] : null;
-  const description = descriptionTag && descriptionTag.length > 0 ? descriptionTag[1] : '';
   const tTags = pinEvent.getMatchingTags('t');
   const hashtags = tTags
     .map((tTag) => (tTag.length > 1 ? tTag[1] : null))
     .filter((t) => t !== null);
+
+  let description = '';
+  let url = '';
+
+  if (pinEvent.kind === 39701) {
+    description = pinEvent.content;
+
+    url = dTag && dTag.length > 0 ? `https://${dTag[1].replace('https://', '')}` : '';
+  } else if (pinEvent.kind === 39700) {
+    // kind 39700 is deprecated due to NIP-B0, but we still need to support it for now
+
+    const descriptionTags = pinEvent.getMatchingTags('description');
+    const descriptionTag = descriptionTags.length > 0 ? descriptionTags[0] : null;
+    description = descriptionTag && descriptionTag.length > 0 ? descriptionTag[1] : '';
+
+    url =
+      pinEvent.content.startsWith('http://') || pinEvent.content.startsWith('https://')
+        ? pinEvent.content
+        : `https://${pinEvent.content}`;
+  }
 
   return {
     url,
@@ -35,7 +50,7 @@ const parsePinEvent = (pinEvent: NDKEvent) => {
 export const PinContent = ({ event, editMode }: { event: NDKEvent; editMode?: boolean }) => {
   const parsedPinEvent = useMemo(() => parsePinEvent(event), [event]);
 
-  const [content, setContent] = useState<string>(parsedPinEvent.url);
+  const [url, setUrl] = useState<string>(parsedPinEvent.url);
   const [description, setDescription] = useState<string>(parsedPinEvent.description);
   const [hashtags, setHashtags] = useState<string[]>(parsedPinEvent.hashtags);
   const [newHashtag, setNewHashtag] = useState<string>('');
@@ -53,10 +68,20 @@ export const PinContent = ({ event, editMode }: { event: NDKEvent; editMode?: bo
         return;
       }
 
-      if (content.length === 0 || (!content.startsWith('http') && !content.startsWith('www'))) {
+      if (event.kind !== 39701) {
+        toast({
+          title: 'Error',
+          variant: 'destructive',
+          description:
+            'This pin cannot be updated as the kind 39700 is deprecated due to NIP-B0. Please delete the pin and create a new one.',
+        });
+        return;
+      }
+
+      if (url.length === 0 || !url.startsWith('https')) {
         toast({
           title: 'Invalid URL',
-          description: 'URL must start with http or www',
+          description: 'URL must start with https',
           variant: 'destructive',
         });
         return;
@@ -65,8 +90,7 @@ export const PinContent = ({ event, editMode }: { event: NDKEvent; editMode?: bo
       const e = new NDKEvent(ndk);
       e.kind = event.kind;
       e.dTag = event.dTag;
-      e.content = content;
-      e.tags.push(['description', description]);
+      e.content = description;
       hashtags.forEach((t) => {
         e.tags.push(['t', t]);
       });
@@ -82,7 +106,7 @@ export const PinContent = ({ event, editMode }: { event: NDKEvent; editMode?: bo
           } else {
             const naddr = naddrEncode({
               identifier: event.tagAddress(),
-              kind: event.kind || 39700,
+              kind: event.kind || 39701,
               pubkey: event.pubkey,
               relays: event.onRelays.map((relay) => relay.url),
             });
@@ -98,7 +122,7 @@ export const PinContent = ({ event, editMode }: { event: NDKEvent; editMode?: bo
           });
         });
     },
-    [ndk, content, toast, setContent, hashtags, navigate, description],
+    [ndk, url, toast, setUrl, hashtags, navigate, description],
   );
 
   return (
@@ -106,12 +130,23 @@ export const PinContent = ({ event, editMode }: { event: NDKEvent; editMode?: bo
       {editMode ? (
         <>
           <div className="flex flex-col gap-2 pb-2">
-            <Input
+            {/* <Input
               className="bg-background"
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
+              value={url}
+              onChange={(e) => setUrl(e.target.value)}
               placeholder="https://"
-            />
+            /> */}
+
+            <a
+              href={parsedPinEvent?.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="[overflow-wrap:anywhere] text-primary flex items-center group hover:underline"
+            >
+              {parsedPinEvent?.url}
+
+              <ArrowRightIcon className="ml-1 w-4 h-4 opacity-0 -translate-x-1 transition-all duration-200 ease-out group-hover:translate-x-0 group-hover:opacity-80" />
+            </a>
 
             {showOptions && (
               <>
